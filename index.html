@@ -118,7 +118,7 @@ textarea{min-height:70px;resize:vertical}
 <body>
 <div class="wrap">
   <header>
-    <div class="eyebrow">6-week plan · goal 49:00</div>
+    <div class="eyebrow">5-week plan · goal 49:00</div>
     <h1>10K <span>Tracker</span></h1>
   </header>
 
@@ -171,7 +171,7 @@ textarea{min-height:70px;resize:vertical}
   <section class="panel" id="p-settings">
     <div class="card">
       <h3>Plan start</h3>
-      <p class="note">Pick the Monday of Week 1. Sessions fall on Tuesday and Saturday; race day is the Saturday of Week 6 (change it below if your race is another day).</p>
+      <p class="note">Pick the Monday of Week 1. Intervals fall on Wednesday and long runs on Sunday; race day is the Sunday of Week 5 (change it below if your race is another day).</p>
       <label class="f">Week 1 Monday</label>
       <input type="date" id="startInput">
       <label class="f">Race date</label>
@@ -208,23 +208,20 @@ textarea{min-height:70px;resize:vertical}
 <script>
 const PLAN = [
  {w:1,title:"Build your base",s:[
-  {id:"w1t",day:1,type:"Intervals",short:"4 × 2 min @ 4:40–4:50",steps:["Warm-up: 10 min @ <b>6:15–6:45</b>","4 × 2 min @ <b>4:40–4:50</b>","Recovery: 2 min easy jog @ 6:30–7:00 between reps","Cool-down: 5–10 min easy"]},
-  {id:"w1s",day:5,type:"Long run",km:6,short:"6 km @ 6:00–6:40",steps:["6 km @ <b>6:00–6:40</b>, easy conversational effort"]}]},
+  {id:"w1t",day:2,type:"Intervals",short:"4 × 2 min @ 4:40–4:50",steps:["Warm-up: 10 min @ <b>6:15–6:45</b>","4 × 2 min @ <b>4:40–4:50</b>","Recovery: 2 min easy jog @ 6:30–7:00 between reps","Cool-down: 5–10 min easy"]},
+  {id:"w1s",day:6,type:"Long run",km:6,short:"6 km @ 6:00–6:40",steps:["6 km @ <b>6:00–6:40</b>, easy conversational effort"]}]},
  {w:2,title:"Build speed",s:[
-  {id:"w2t",day:1,type:"Intervals",short:"5 × 2 min @ 4:40–4:50",steps:["Warm-up: 10 min @ <b>6:15–6:45</b>","5 × 2 min @ <b>4:40–4:50</b>","Recovery: 2 min easy jog @ 6:30–7:00 between reps","Cool-down: 5–10 min easy"]},
-  {id:"w2s",day:5,type:"Long run",km:7,short:"7 km @ 6:00–6:40",steps:["7 km @ <b>6:00–6:40</b>, easy conversational effort"]}]},
+  {id:"w2t",day:2,type:"Intervals",short:"5 × 2 min @ 4:40–4:50",steps:["Warm-up: 10 min @ <b>6:15–6:45</b>","5 × 2 min @ <b>4:40–4:50</b>","Recovery: 2 min easy jog @ 6:30–7:00 between reps","Cool-down: 5–10 min easy"]},
+  {id:"w2s",day:6,type:"Long run",km:7,short:"7 km @ 6:00–6:40",steps:["7 km @ <b>6:00–6:40</b>, easy conversational effort"]}]},
  {w:3,title:"Tempo endurance",s:[
-  {id:"w3t",day:1,type:"Tempo",short:"15–20 min @ 5:10–5:25",steps:["Warm-up: 10 min @ <b>6:15–6:45</b>","15–20 min @ <b>5:10–5:25</b>","Cool-down: 5–10 min easy"]},
-  {id:"w3s",day:5,type:"Long run",km:8,short:"8 km @ 6:00–6:35",steps:["8 km @ <b>6:00–6:35</b>, easy conversational effort"]}]},
+  {id:"w3t",day:2,type:"Tempo",short:"15–20 min @ 5:10–5:25",steps:["Warm-up: 10 min @ <b>6:15–6:45</b>","15–20 min @ <b>5:10–5:25</b>","Cool-down: 5–10 min easy"]},
+  {id:"w3s",day:6,type:"Long run",km:8,short:"8 km @ 6:00–6:35",steps:["8 km @ <b>6:00–6:35</b>, easy conversational effort"]}]},
  {w:4,title:"Peak endurance",s:[
-  {id:"w4t",day:1,type:"Longer intervals",short:"5 × 3 min @ 4:40–4:55",steps:["Warm-up: 10–15 min @ <b>6:15–6:45</b>","5 × 3 min @ <b>4:40–4:55</b>","Recovery: 2 min easy jog @ 6:30–7:00 between reps","Cool-down: 5–10 min easy"]},
-  {id:"w4s",day:5,type:"Long run",km:9,short:"9 km @ 6:00–6:35",steps:["9 km @ <b>6:00–6:35</b>","Only if prior weeks felt manageable"]}]},
- {w:5,title:"Race-pace practice",s:[
-  {id:"w5t",day:1,type:"1 km repeats",short:"3 × 1 km @ 4:54",steps:["Warm-up: 10–15 min easy","3 × 1 km @ <b>4:54</b>, only if this pace suits your current fitness","Recovery: 2–3 min easy jog @ 6:30–7:00","Cool-down: 5–10 min easy"]},
-  {id:"w5s",day:5,type:"Long run",km:7.5,short:"7–8 km @ 6:05–6:40",steps:["7–8 km @ <b>6:05–6:40</b>, finish feeling fresh"]}]},
- {w:6,title:"Race week",s:[
-  {id:"w6t",day:1,type:"Easy shakeout",short:"20–25 min @ 6:15–6:45",steps:["20–25 min @ <b>6:15–6:45</b>","Optional: 4 × 15 s relaxed strides if feeling fresh"]},
-  {id:"race",day:5,type:"Race day — 10K",km:10,race:true,short:"Target ≈ 49:00",steps:["Km 1–2 @ <b>5:00</b>","Km 3–8 @ <b>4:54</b>","Km 9–10 @ <b>4:45–4:54</b> if still strong","Target finish ≈ <b>49:00</b>"]}]}
+  {id:"w4t",day:2,type:"Longer intervals",short:"5 × 3 min @ 4:40–4:55",steps:["Warm-up: 10–15 min @ <b>6:15–6:45</b>","5 × 3 min @ <b>4:40–4:55</b>","Recovery: 2 min easy jog @ 6:30–7:00 between reps","Cool-down: 5–10 min easy"]},
+  {id:"w4s",day:6,type:"Long run",km:9,short:"9 km @ 6:00–6:35",steps:["9 km @ <b>6:00–6:35</b>","Only if prior weeks felt manageable"]}]},
+ {w:5,title:"Race week",s:[
+  {id:"w6t",day:2,type:"Easy shakeout",short:"20–25 min @ 6:15–6:45",steps:["20–25 min @ <b>6:15–6:45</b>","Optional: 4 × 15 s relaxed strides if feeling fresh"]},
+  {id:"race",day:6,type:"Race day — 10K",km:10,race:true,short:"Target ≈ 49:00",steps:["Km 1–2 @ <b>5:00</b>","Km 3–8 @ <b>4:54</b>","Km 9–10 @ <b>4:45–4:54</b> if still strong","Target finish ≈ <b>49:00</b>"]}]}
 ];
 PLAN.forEach(w=>w.s.forEach(s=>{s.w=w.w}));
 const ALL = PLAN.flatMap(w=>w.s);
@@ -332,8 +329,8 @@ document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.p));window.scrollTo(0,0)});
 
 $("#startInput").value=st.start;
-$("#raceInput").value=st.race||iso(dateOf({w:6,day:5}));
-$("#startInput").onchange=e=>{if(!e.target.value)return;st.start=e.target.value;if(!st.raceCustom){st.race=null;$("#raceInput").value=iso(dateOf({w:6,day:5}))}save();render()};
+$("#raceInput").value=st.race||iso(dateOf({w:5,day:6}));
+$("#startInput").onchange=e=>{if(!e.target.value)return;st.start=e.target.value;if(!st.raceCustom){st.race=null;$("#raceInput").value=iso(dateOf({w:5,day:6}))}save();render()};
 $("#raceInput").onchange=e=>{st.race=e.target.value||null;st.raceCustom=!!e.target.value;save();render()};
 document.querySelectorAll("#themeSeg button").forEach(b=>b.onclick=()=>{st.theme=b.dataset.v;save();applyTheme()});
 $("#exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(st,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`10k-tracker-${iso(new Date())}.json`;a.click()};
