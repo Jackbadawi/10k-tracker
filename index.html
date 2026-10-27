@@ -125,7 +125,7 @@ textarea{min-height:70px;resize:vertical}
   <section class="panel on" id="p-plan">
     <div class="hero">
       <div class="hero-top">
-        <div><div class="big" id="doneCount">0<small>/ 13</small></div><div class="note">sessions completed</div></div>
+        <div><div class="big" id="doneCount">0<small>/ 12</small></div><div class="note">sessions completed</div></div>
         <div style="text-align:right"><div class="note">Race day</div><b id="raceDate"></b></div>
       </div>
       <div class="bar"><i id="bar" style="width:0"></i></div>
@@ -226,7 +226,8 @@ const PLAN = [
   {id:"w6t",day:1,type:"Easy shakeout",short:"20–25 min @ 6:15–6:45",steps:["20–25 min @ <b>6:15–6:45</b>","Optional: 4 × 15 s relaxed strides if feeling fresh"]},
   {id:"race",day:5,type:"Race day — 10K",km:10,race:true,short:"Target ≈ 49:00",steps:["Km 1–2 @ <b>5:00</b>","Km 3–8 @ <b>4:54</b>","Km 9–10 @ <b>4:45–4:54</b> if still strong","Target finish ≈ <b>49:00</b>"]}]}
 ];
-const ALL = PLAN.flatMap(w=>w.s.map(s=>({...s,w:w.w})));
+PLAN.forEach(w=>w.s.forEach(s=>{s.w=w.w}));
+const ALL = PLAN.flatMap(w=>w.s);
 const KEY="tenk-tracker-v1";
 const defStart="2026-10-26";
 let st = load();
