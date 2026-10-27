@@ -111,6 +111,11 @@ textarea{min-height:70px;resize:vertical}
 .btn.primary{background:var(--accent);color:var(--accent-ink)}
 .btn.ghost{background:var(--chip);color:var(--ink)}
 .btn.small{flex:none;padding:10px 14px;font-size:14px}
+.kmh{color:var(--muted);font-weight:500;font-size:.9em;white-space:nowrap}
+.next .kmh{color:inherit;opacity:.85}
+.steps .kmh{font-weight:500}
+.conv{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end}
+.conv .eq{padding-bottom:12px;color:var(--muted);font-weight:600}
 .painwarn{display:none}
 .painwarn.on{display:block}
 </style>
@@ -140,6 +145,15 @@ textarea{min-height:70px;resize:vertical}
   </section>
 
   <section class="panel" id="p-guide">
+    <div class="card">
+      <h3>Pace ↔ speed</h3>
+      <p class="note">Type either one, the other fills in. Handy for the treadmill.</p>
+      <div class="conv">
+        <div><label class="f">Pace (min/km)</label><input id="cPace" class="mono" inputmode="numeric" placeholder="5:00"></div>
+        <div class="eq">=</div>
+        <div><label class="f">Speed (km/h)</label><input id="cKmh" class="mono" inputmode="decimal" placeholder="12.0"></div>
+      </div>
+    </div>
     <div class="card">
       <h3>Pace guide</h3>
       <table>
@@ -239,6 +253,7 @@ const fmtDate=d=>d.toLocaleDateString(undefined,{weekday:"short",day:"numeric",m
 function dateOf(s){if(s.race&&st.race)return parse(st.race);const d=parse(st.start);d.setDate(d.getDate()+(s.w-1)*7+s.day);return d}
 function toSec(t){if(!t)return null;const p=String(t).trim().split(":").map(Number);if(p.some(isNaN))return null;return p.reduce((a,b)=>a*60+b,0)}
 function fmtSec(s){s=Math.round(s);const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?`${h}:${pad(m)}:${pad(x)}`:`${m}:${pad(x)}`}
+function withKmh(txt){return String(txt).replace(/(^|[^\d:])(\d):([0-5]\d)(?:–(\d):([0-5]\d))?(?![\d:])/g,(m,pre,a,b,c,d)=>{const p1=+a*60+ +b;let out=`${a}:${b}`,k;if(c){const p2=+c*60+ +d;out+=`–${c}:${d}`;k=`${(3600/Math.max(p1,p2)).toFixed(1)}–${(3600/Math.min(p1,p2)).toFixed(1)}`}else k=(3600/p1).toFixed(1);return `${pre}${out} <span class="kmh">(${k} km/h)</span>`})}
 function paceOf(l){const t=toSec(l.time),k=parseFloat(l.km);return t&&k>0?t/k:null}
 const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
 
@@ -262,7 +277,7 @@ function render(){
   const nxt=ALL.find(s=>!st.logs[s.id]?.status);
   const n=$("#next");
   if(nxt){const d=dateOf(nxt);const rel=d.getTime()===t?"Today":d<t?"Overdue · "+fmtDate(d):fmtDate(d);
-    n.style.display="";n.innerHTML=`<div class="k">Next up · Week ${nxt.w} · ${rel}</div><div class="t">${nxt.type}</div><div class="d">${nxt.short}</div>`;n.onclick=()=>openSheet(nxt.id)}
+    n.style.display="";n.innerHTML=`<div class="k">Next up · Week ${nxt.w} · ${rel}</div><div class="t">${nxt.type}</div><div class="d">${withKmh(nxt.short)}</div>`;n.onclick=()=>openSheet(nxt.id)}
   else n.style.display="none";
 
   $("#weeks").innerHTML=PLAN.map(w=>{
@@ -273,7 +288,7 @@ function render(){
       const pain=l.pain==="sharp"?`<i class="flag" style="background:var(--bad)"></i>`:l.pain==="mild"?`<i class="flag" style="background:var(--warn)"></i>`:"";
       const right=l.status==="done"?`<b class="mono">${l.km?l.km+" km":"✓"}</b>${p?fmtSec(p)+"/km":(l.time||"")}`:l.status==="skipped"?"Skipped":fmtDate(d);
       return `<div class="sess ${cls}" data-id="${s.id}"><div class="dot">${l.status==="done"?"✓":l.status==="skipped"?"–":""}</div>
-      <div class="body"><div class="t">${s.type}${pain}</div><div class="s">${s.short}</div></div><div class="r">${right}</div></div>`}).join("")+`</div>`}).join("");
+      <div class="body"><div class="t">${s.type}${pain}</div><div class="s">${withKmh(s.short)}</div></div><div class="r">${right}</div></div>`}).join("")+`</div>`}).join("");
   document.querySelectorAll(".sess").forEach(e=>e.onclick=()=>openSheet(e.dataset.id));
 }
 
@@ -284,7 +299,7 @@ function openSheet(id){
   const body=$("#sheetBody");
   body.innerHTML=`<div class="grab"></div>
   <h3>${s.type}</h3><div class="sub">Week ${s.w} · ${fmtDate(dateOf(s))}</div>
-  <ul class="steps">${s.steps.map(x=>`<li>${x}</li>`).join("")}</ul>
+  <ul class="steps">${s.steps.map(x=>`<li>${withKmh(x)}</li>`).join("")}</ul>
   <div class="row">
     <div><label class="f">Distance (km)</label><input id="fKm" inputmode="decimal" placeholder="${s.km||"e.g. 6.2"}" value="${cur.km||""}"></div>
     <div><label class="f">Time (mm:ss)</label><input id="fTime" inputmode="numeric" placeholder="${s.race?"49:00":"38:30"}" value="${cur.time||""}"></div>
@@ -306,7 +321,7 @@ function openSheet(id){
     <button class="btn ghost" id="closeBtn">Close</button>
   </div>`;
   const upd=()=>{const p=paceOf({km:$("#fKm").value,time:$("#fTime").value});
-    let txt=p?`Avg pace <b class="mono">${fmtSec(p)}/km</b>`:"Enter distance and time to see pace";
+    let txt=p?`Avg pace <b class="mono">${fmtSec(p)}/km</b> · <b class="mono">${(3600/p).toFixed(1)} km/h</b>`:"Enter distance and time to see pace";
     if(p&&s.race){txt+=` · ${toSec($("#fTime").value)<=49*60?"🎯 goal hit":"goal 49:00"}`}
     $("#fPace").innerHTML=txt};
   $("#fKm").oninput=upd;$("#fTime").oninput=upd;upd();
@@ -338,6 +353,9 @@ $("#importBtn").onclick=()=>$("#importFile").click();
 $("#importFile").onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{const j=JSON.parse(t);if(!j.logs)throw 0;st=j;save();applyTheme();$("#startInput").value=st.start;render();alert("Imported.")}catch(x){alert("That file isn't a tracker backup.")}})};
 $("#resetBtn").onclick=()=>{if(confirm("Delete all session logs?")){st.logs={};save();render()}};
 
+document.querySelectorAll("#p-guide td.mono").forEach(td=>{td.innerHTML=withKmh(td.textContent)});
+$("#cPace").oninput=e=>{const t=toSec(e.target.value);$("#cKmh").value=t&&e.target.value.includes(":")?(3600/t).toFixed(1):""};
+$("#cKmh").oninput=e=>{const k=parseFloat(e.target.value);$("#cPace").value=k>0?fmtSec(3600/k):""};
 applyTheme();render();
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
